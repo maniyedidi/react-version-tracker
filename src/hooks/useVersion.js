@@ -10,7 +10,7 @@ const useVersion = () => {
       details &&
       versionDetails.version !== details.version
     ) {
-      setVerDetails(versionDetails);
+      setVerDetails(details);
     }
   };
 

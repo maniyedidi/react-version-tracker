@@ -35,7 +35,7 @@ const VersionTracker = ({
   const inti = () => {
     getJSON(versionFileUrl, function (err, data) {
       if (err !== null) {
-      } else {
+      } else if (data) {
         const remoteVersion = data.version;
         if (currentVersion !== remoteVersion) {
           onVersionChange({
@@ -50,7 +50,7 @@ const VersionTracker = ({
       }
     });
   };
-  
+
   return null;
 };
 
