@@ -118,12 +118,36 @@ axios.interceptors.response.use(
     })
 ```
 
+When any version change detected new version will be returned by useVersion 
+```
+const { version } = useVersion();
+
+  useEffect(() => {
+    if (version !== currentVersion) {
+      // write your logic here
+    }
+  }, [version]);
+```
+
+
+### Server side changes
+
+Node JS Express changes add to the route level
+
+```js
+response.header('Access-Control-Expose-Headers', 'x-version');
+response.set('x-version', '1.0.0');
+```
+
+
 
 ## Roadmap
 
 - Display modal instead of alert 
 
 - Give option to auto reload in  VersionTracker
+
+- Add auto reload and Display alert option in useVersionTracker 
 
 
 ## 🔗 Links
