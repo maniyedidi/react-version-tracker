@@ -15,7 +15,10 @@
   "keywords": [
     "React",
     "Version",
-    "Tracker"
+    "Tracker",
+    "Detect version change",
+    "Client side version",
+    "Server side version"
   ],
   "author": "maniyedidi",
   "license": "MIT",

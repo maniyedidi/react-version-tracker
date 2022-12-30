@@ -1,37 +1,31 @@
 # React Version Tracker
 
-This module will be used to detect the version change of application
+This module will be used to detect the version change of the application
 
-Version tracking can we done 
+Version tracking can be done 
 
 ## What?
 - React version tracker library is used to track app version and inform the 
 user.
-- It has two type of control  
+- It has two types of control  
   - using hooks  
   - using component VersionTracker
 
-
-## Authors
-
-- [@maniyedidi](https://github.com/maniyedidi)
-
-
 ## Installation
 
-Install eact-version-tracker with npm
+Install react-version-tracker with npm
 
 ```bash
   npm install react-version-tracker  
 ```
 
-Install eact-version-tracker with yarn
+Install react-version-tracker with yarn
 
 ```bash
   yarn add react-version-tracker  
 ```
     
-### How to use  VersionTracker component  
+### How to use the VersionTracker component  
 
 import Component in app level 
 
@@ -51,18 +45,18 @@ in app.js add the below code
 ### PROPTYPES
 | Prop | Type | Default | Description |  
 | ---- | ---- | ------- |  ------- | 
-| currentVersion | String |  | This will be current version of build |
-| versionFileUrl | String | /version.json | this can be file location or any api 
+| currentVersion | String |  | This will be the current version of the build |
+| versionFileUrl | String | /version.json | this can be file location or any API 
 | displayAlert | Boolean | false| when there is change alert will be displayed
-| onVersionChange | Function |  | when version change method will be called 
-| message | String |  | user message on alert box.
+| onVersionChange | Function |  | when the version change method will be called 
+| message | String |  | user message on the alert box.
 
 Example 
 
 ### versionFileUrl
 
 ```
-when we keept version file in web server simple pass the file name 
+when we keep the version file in the web server simple pass the file name 
 versionFileUrl="version.json". 
 or
 versionFileUrl="http://text.com/api/get-version"
@@ -79,13 +73,13 @@ this funtion will return object {"version":"1.0.0"}
 
 
 ## how to use version hooks (useVersionTracker and useVersion)
-react-version-tracker has two hooks useVersionTracker and useVersion . we have two do 
-client and server side changes to use this 
+react-version-tracker has two hooks useVersionTracker and useVersion . we have to do 
+client and server side changes to use hooks 
 
 ### Client side changes
- we need to pass response of api to useVersionTracker . it has two params first is response 
- second one is key of response header. useVersionTracker hook can be added axios response
-interceptor  or any http service.
+ we need to pass response of API to useVersionTracker . it has two params first is the response 
+second one is the key of response header. 
+useVersionTracker hook can be added to the axios response interceptor  or in the HTTP service.
 
 Sample 1 
 
@@ -118,7 +112,7 @@ axios.interceptors.response.use(
     })
 ```
 
-When any version change detected new version will be returned by useVersion 
+When any version change is detected new version will be returned by useVersion hook 
 ```
 const { version } = useVersion();
 
@@ -132,12 +126,18 @@ const { version } = useVersion();
 
 ### Server side changes
 
-Node JS Express changes add to the route level
+Node JS changes from api response.
 
 ```js
+let results= {};
 response.header('Access-Control-Expose-Headers', 'x-version');
 response.set('x-version', '1.0.0');
+return response.send(results);
 ```
+
+## Documentation
+
+[Documentation](https://medium.com/@maniyedidi/how-to-use-react-version-tracker-41ebf3b8f1f9)
 
 
 
@@ -145,9 +145,9 @@ response.set('x-version', '1.0.0');
 
 - Display modal instead of alert 
 
-- Give option to auto reload in  VersionTracker
+- Give the option to auto-reload in  VersionTracker
 
-- Add auto reload and Display alert option in useVersionTracker 
+- Add auto-reload and Display alert option in useVersionTracker 
 
 
 ## 🔗 Links
