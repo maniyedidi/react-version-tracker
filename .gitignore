@@ -25,3 +25,6 @@ yarn-debug.log*
 yarn-error.log*
 
 dist
+# build outputs
+/dist
+/storybook-static

@@ -1,19 +1,6 @@
-import React, { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
-const getJSON = function (url, callback) {
-  var xhr = new XMLHttpRequest();
-  xhr.open('GET', url, true);
-  xhr.responseType = 'json';
-  xhr.onload = function () {
-    var status = xhr.status;
-    if (status === 200) {
-      callback(null, xhr.response);
-    } else {
-      callback(status, xhr.response);
-    }
-  };
-  xhr.send();
-};
+const DEFAULT_MESSAGE = 'There is a version change, Please do hard refresh';
 
 const VersionTracker = ({
   currentVersion,
@@ -23,33 +10,46 @@ const VersionTracker = ({
   displayAlert,
   message,
 }) => {
-  useEffect(() => {
-    let intervalId = setInterval(() => {
-      inti();
-    }, [interval * 1000]);
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, []);
+  // always read the latest props from inside the long-lived interval
+  const latest = useRef({});
+  latest.current = { currentVersion, onVersionChange, displayAlert, message };
+  const notifiedVersion = useRef(null);
 
-  const inti = () => {
-    getJSON(versionFileUrl, function (err, data) {
-      if (err !== null) {
-      } else if (data) {
+  useEffect(() => {
+    let cancelled = false;
+
+    const check = async () => {
+      try {
+        const res = await fetch(versionFileUrl, { cache: 'no-store' });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (cancelled || !data || data.version === undefined) return;
         const remoteVersion = data.version;
-        if (currentVersion !== remoteVersion) {
-          onVersionChange({
-            version: remoteVersion,
-          });
-          if (displayAlert) {
-            alert(
-              message || 'There is a version change, Please do hard refresh'
-            );
+        const props = latest.current;
+        if (
+          remoteVersion !== props.currentVersion &&
+          remoteVersion !== notifiedVersion.current
+        ) {
+          notifiedVersion.current = remoteVersion;
+          if (typeof props.onVersionChange === 'function') {
+            props.onVersionChange({ version: remoteVersion });
+          }
+          if (props.displayAlert) {
+            alert(props.message || DEFAULT_MESSAGE);
           }
         }
+      } catch (e) {
+        // network/parse errors are ignored; the next tick retries
       }
-    });
-  };
+    };
+
+    check();
+    const id = setInterval(check, interval * 1000);
+    return () => {
+      cancelled = true;
+      clearInterval(id);
+    };
+  }, [versionFileUrl, interval]);
 
   return null;
 };
