@@ -1,22 +1,20 @@
-import React, { useState } from 'react';
-import { APP_VERSION_EVENT_ID, emitter } from './useVersionTracker';
+import { useEffect, useState } from 'react';
+import { APP_VERSION_EVENT_ID, emitter } from './useVersionTracker.js';
 
 const useVersion = () => {
-  const [versionDetails, setVerDetails] = useState({});
+  const [versionDetails, setVersionDetails] = useState({});
 
-  const updateVersionChange = (details) => {
-    if (
-      versionDetails &&
-      details &&
-      versionDetails.version !== details.version
-    ) {
-      setVerDetails(details);
-    }
-  };
-
-  React.useEffect(() => {
-    emitter.on(APP_VERSION_EVENT_ID, updateVersionChange);
-    return () => emitter.off(APP_VERSION_EVENT_ID, versionDetails);
+  useEffect(() => {
+    const onVersion = (details) => {
+      if (!details) return;
+      setVersionDetails((prev) =>
+        prev.version === details.version ? prev : details
+      );
+    };
+    emitter.on(APP_VERSION_EVENT_ID, onVersion);
+    return () => {
+      emitter.off(APP_VERSION_EVENT_ID, onVersion);
+    };
   }, []);
 
   return versionDetails;
