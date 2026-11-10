@@ -11,6 +11,10 @@ user.
   - using hooks  
   - using component VersionTracker
 
+## Requirements
+
+- React 19 (`react` and `react-dom` `^19.0.0`). For React 17/18 use `react-version-tracker@0.0.4`.
+
 ## Installation
 
 Install react-version-tracker with npm
@@ -47,6 +51,7 @@ in app.js add the below code
 | ---- | ---- | ------- |  ------- | 
 | currentVersion | String |  | This will be the current version of the build |
 | versionFileUrl | String | /version.json | this can be file location or any API 
+| interval | Number | 60 | how often (in seconds) to check for a new version. The first check runs immediately |
 | displayAlert | Boolean | false| when there is change alert will be displayed
 | onVersionChange | Function |  | when the version change method will be called 
 | message | String |  | user message on the alert box.
@@ -69,7 +74,9 @@ versionFileUrl="http://text.com/api/get-version"
 
 ### onVersionChange
 
-this funtion will return object {"version":"1.0.0"} 
+this function is called once per newly detected version with `{ "version": "1.0.0" }`. It is optional.
+
+The version file is requested with `fetch` and `cache: 'no-store'`; network errors are ignored and retried on the next interval.
 
 
 ## how to use version hooks (useVersionTracker and useVersion)
@@ -133,6 +140,14 @@ let results= {};
 response.header('Access-Control-Expose-Headers', 'x-version');
 response.set('x-version', '1.0.0');
 return response.send(results);
+```
+
+## Development
+
+```bash
+npm run build-lib        # build dist/ (CJS + ES)
+npm test                 # vitest
+npm run storybook        # stories for every use case on :6006
 ```
 
 ## Documentation
